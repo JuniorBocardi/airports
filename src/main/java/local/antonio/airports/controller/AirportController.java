@@ -10,6 +10,7 @@ import local.antonio.airports.services.AirportService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -25,7 +26,14 @@ public class AirportController {
            List<Airport> result = airportService.findAll();
            return result;
        }
+           
+       @GetMapping ("/city/{cityName}")
+       public List<Airport> findByCityIgnoreCase(@PathVariable String cityName) {
+           List<Airport> result = airportService.findByCity(cityName);
+           return result;
+       }
+       
       
-      
-    }
+     
+}
    
