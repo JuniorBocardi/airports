@@ -2,7 +2,9 @@ package local.antonio.airports.services;
 
 import java.util.List;
 import local.antonio.airports.DTO.AirportMinDTO;
+import local.antonio.airports.DTO.AirportsNearMeDTO;
 import local.antonio.airports.entities.Airport;
+import local.antonio.airports.projections.AirportNearMeProjection;
 import local.antonio.airports.repositories.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,4 +39,14 @@ public class AirportService {
         Airport result = airportRepository.findByIataCode(iataCode);
         return result;
     }
+    
+    public List<AirportsNearMeDTO> findNearMe(double latitude, double longitude) {
+        List< AirportNearMeProjection> resultNearAirports = airportRepository.findNearMe (latitude, longitude);
+        
+        List<AirportsNearMeDTO> resultDTO = resultNearAirports.stream()
+                .map(x -> new AirportsNearMeDTO(x)).toList();
+        
+        return resultDTO;
+}
+    
 }

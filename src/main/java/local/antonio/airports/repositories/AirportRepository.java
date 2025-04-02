@@ -6,7 +6,9 @@ package local.antonio.airports.repositories;
 
 import java.util.List;
 import local.antonio.airports.entities.Airport;
+import local.antonio.airports.projections.AirportNearMeProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 
 
@@ -20,5 +22,25 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
     
     Airport findByIataCode (String iataCode);
     
+    @Query(nativeQuery = true, value ="""
+    SELECT
+    airport.id,
+    airport.name,
+     airport.city,
+    airport.iatacode,
+    airport.latitude,
+    airport.longitude,
+    airport.altitude,
+    SQRT(
+    power(airport.latitude - :latOrigem, 2 ) +
+    power(airport.longitude - :lonOrigem, 2)) * 60 * 1.852 as
+    distanciaKM
+    from AIRPORT
+    order by distanciaKM
+    limit 10;
+    """
+    )
+    
+    List <AirportNearMeProjection> findNearMe(double latOrigem, double lonOrigem);
     
 }
